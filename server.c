@@ -21,5 +21,12 @@ int main() {
     perror("Binding failed\n");
     exit(EXIT_FAILURE);
   }
+
+  if (listen(server_fd, 10) < 0) {
+    perror("Listen failed\n");
+    exit(EXIT_FAILURE);
+  }
+  printf("Server is listening...\n");
+
   return 0;
 }
