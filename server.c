@@ -28,5 +28,15 @@ int main() {
   }
   printf("Server is listening...\n");
 
+  int new_socket = 0;
+  struct sockaddr_in address_client;
+  socklen_t addr_len = sizeof(address_client);
+
+  new_socket = accept(server_fd, (struct sockaddr *)&address_client, &addr_len);
+  if (new_socket < 0) {
+    printf("Accept failure\n");
+    exit(EXIT_FAILURE);
+  }
+  printf("Connection accepted\n");
   return 0;
 }
