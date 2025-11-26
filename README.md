@@ -17,7 +17,7 @@ Compliant HTTP/1.1 response headers
 The server creates a TCP socket bound to port 8080. When a browser connects, the server accepts the connection, reads the raw HTTP request into a buffer, and immediately writes back a pre-formatted HTTP response string before closing the connection.
 
 ## Building
-```bash
+
 ```bash
 make
 ./webserver
