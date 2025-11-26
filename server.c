@@ -1,7 +1,9 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 int main() {
 
@@ -28,15 +30,31 @@ int main() {
   }
   printf("Server is listening...\n");
 
-  int new_socket = 0;
-  struct sockaddr_in address_client;
-  socklen_t addr_len = sizeof(address_client);
+  while (1) {
+    struct sockaddr_in address_client;
+    socklen_t addr_len = sizeof(address_client);
 
-  new_socket = accept(server_fd, (struct sockaddr *)&address_client, &addr_len);
-  if (new_socket < 0) {
-    printf("Accept failure\n");
-    exit(EXIT_FAILURE);
+    int new_socket =
+        accept(server_fd, (struct sockaddr *)&address_client, &addr_len);
+
+    if (new_socket < 0) {
+      printf("Accept failure\n");
+      exit(EXIT_FAILURE);
+    }
+
+    char buffer[1024] = {0};
+    read(new_socket, buffer, 1024);
+    // send(new_socket, "ECHO: ", 6, 0);
+    // send(new_socket, buffer, bytes, 0);
+
+    const char *http_response =
+        "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "
+        "12\r\n\r\nHello World!";
+
+    write(new_socket, http_response, strlen(http_response));
+
+    close(new_socket);
+    printf("Client disconnected\n");
   }
-  printf("Connection accepted\n");
   return 0;
 }
