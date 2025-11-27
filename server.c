@@ -38,8 +38,8 @@ int main() {
         accept(server_fd, (struct sockaddr *)&address_client, &addr_len);
 
     if (new_socket < 0) {
-      printf("Accept failure\n");
-      exit(EXIT_FAILURE);
+      perror("Accept failed\n");
+      continue;
     }
 
     char buffer[1024] = {0};
@@ -47,9 +47,17 @@ int main() {
     // send(new_socket, "ECHO: ", 6, 0);
     // send(new_socket, buffer, bytes, 0);
 
-    const char *http_response =
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "
-        "12\r\n\r\nHello World!";
+    const char *http_response = "HTTP/1.1 200 OK\r\n"
+                                "Content-Type: text/html\r\n"
+                                "\r\n"
+                                "<!DOCTYPE html>"
+                                "<html>"
+                                "<head><title> My C Server</title></head>"
+                                "<body>"
+                                "<p>This is written in C from scratch. </p>"
+                                "<a href='/about'> About </a>"
+                                "</body>"
+                                "</html>";
 
     write(new_socket, http_response, strlen(http_response));
 
